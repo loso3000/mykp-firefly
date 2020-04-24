@@ -1,0 +1,24 @@
+#!/bin/sh
+
+uci -q batch <<-EOF >/dev/null
+	delete ucitrack.@firefly[-1]
+	add ucitrack firefly
+	set ucitrack.@firefly[-1].init=firefly
+	commit ucitrack
+	delete firewall.firefly
+	set firewall.firefly=include
+	set firewall.firefly.type=script
+	set firewall.firefly.path=/var/etc/firefly.include
+	set firewall.firefly.reload=1
+	commit firewall
+EOF
+
+/etc/init.d/dnscrypt-proxy stop
+/etc/init.d/dnscrypt-proxy disable
+/etc/init.d/privoxy stop
+/etc/init.d/privoxy disable
+killall -q -9 v2ray-plugin  dnscrypt-proxy  dns2socks  dnsforwarder chinadns
+
+/usr/share/firefly/gfw2ipset.sh
+rm -f /tmp/luci-indexcache
+exit 0

@@ -1,0 +1,11 @@
+{
+	"luci-app-firefly": {
+	"description": "Grant UCI access for luci-app-firefly",
+	"read": {
+		"uci": [ "" ]
+		},
+	"write": {
+		"uci": [ "firefly" ]
+		}
+	}
+}
